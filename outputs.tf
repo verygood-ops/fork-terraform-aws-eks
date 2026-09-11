@@ -279,3 +279,17 @@ output "self_managed_node_groups_autoscaling_group_names" {
   description = "List of the autoscaling group names created by self-managed node groups"
   value       = compact([for group in module.self_managed_node_group : group.autoscaling_group_name])
 }
+
+################################################################################
+# User Data
+################################################################################
+
+output "user_data_templates" {
+  description = "Map of built-in user_data template paths, keyed by the OS family they bootstrap (al2, al2023, bottlerocket, windows). Useful for pointing `user_data_template_path` at the module's own template when using a custom AMI (ami_type = \"CUSTOM\") that is otherwise compatible with one of these bootstrap formats, without having to vendor a copy of the template into the calling configuration."
+  value = {
+    al2          = "${path.module}/templates/al2_user_data.tpl"
+    al2023       = "${path.module}/templates/al2023_user_data.tpl"
+    bottlerocket = "${path.module}/templates/bottlerocket_user_data.tpl"
+    windows      = "${path.module}/templates/windows_user_data.tpl"
+  }
+}
